@@ -3,24 +3,24 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
-  name          String?
+  id            String    @id
+  name          String
+  email         String
   emailVerified Boolean
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  // Add opposite relation fields
-  sessions      Session[]
-  accounts      Account[]
-  passkeys      Passkey[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Session       Session[]
+  Account       Account[]
+  Passkey       Passkey[]
 
+  @@unique([email])
   @@map("user")
 }
 
@@ -32,7 +32,7 @@ model Session {
   updatedAt DateTime
   ipAddress String?
   userAgent String?
-  userId    Int // Changed from String to Int to match User.id
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
@@ -43,7 +43,7 @@ model Account {
   id                    String    @id
   accountId             String
   providerId            String
-  userId                Int // Changed from String to Int to match User.id
+  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -73,7 +73,7 @@ model Passkey {
   id             String    @id
   name           String?
   publicKey      String
-  userId         Int // Changed from String to Int to match User.id
+  userId         String
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   webauthnUserID String
   counter        Int

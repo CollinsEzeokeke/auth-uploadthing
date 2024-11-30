@@ -17,8 +17,19 @@ import { Loader2, X } from "lucide-react";
 import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { generateReactHelpers } from "@uploadthing/react"
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 export default function SignUp() {
+const { useUploadThing } = generateReactHelpers<OurFileRouter>();
+const {startUpload} = useUploadThing("imageUploader", {
+    onClientUploadComplete: (res) => {
+      console.log('Upload completed', res);
+    },
+    onUploadError: (error) => {
+      console.error('Upload error', error);
+    }
+  })
 	const { toast } = useToast()
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -41,6 +52,47 @@ export default function SignUp() {
 			reader.readAsDataURL(file);
 		}
 	};
+
+	const handleSubmitForm = async () => {
+		setLoading(true)
+		try{
+			let imageUrl = "";
+			if (image) {
+			  const profileUpload = await startUpload([image]);
+			  if (!profileUpload?.[0]?.url) {
+				throw new Error('Image upload failed');
+			  }
+			  imageUrl = profileUpload[0].url;
+			}
+				await signUp.email({
+					email,
+					password,
+					name: `${firstName} ${lastName}`,
+					image: image? imageUrl : "",
+					callbackURL: "/dashboard",
+					fetchOptions: {
+						credentials: 'include',
+						onResponse: () => {
+							setLoading(false);
+						},
+						onRequest: () => {
+							setLoading(true);
+						},
+						onError: (ctx) => {
+							toast({
+								title: 'error',
+								description: ctx.error.message
+							});
+						},
+						onSuccess: async () => {
+							router.push("/dashboard");
+						},
+					},
+				});
+		}catch(error){
+			console.log(error)
+		}
+	}
 
 	return (
 		<div className="h-screen w-screen flex items-center justify-center">
@@ -151,32 +203,7 @@ export default function SignUp() {
 							type="submit"
 							className="w-full"
 							disabled={loading}
-							onClick={async () => {
-								await signUp.email({
-									email,
-									password,
-									name: `${firstName} ${lastName}`,
-									image: image ? await convertImageToBase64(image) : "",
-									callbackURL: "/dashboard",
-									fetchOptions: {
-										onResponse: () => {
-											setLoading(false);
-										},
-										onRequest: () => {
-											setLoading(true);
-										},
-										onError: (ctx) => {
-											toast({
-												title: 'error',
-												description: ctx.error.message
-											});
-										},
-										onSuccess: async () => {
-											router.push("/dashboard");
-										},
-									},
-								});
-							}}
+							onClick={handleSubmitForm}
 						>
 							{loading ? (
 								<Loader2 size={16} className="animate-spin" />
@@ -197,13 +224,4 @@ export default function SignUp() {
 		</div>
 
 	);
-}
-
-async function convertImageToBase64(file: File): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onloadend = () => resolve(reader.result as string);
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
 }

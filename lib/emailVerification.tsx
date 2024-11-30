@@ -45,7 +45,7 @@ export const EmailVerification: React.FC<VerificationEmailProps> = ({
 
               {/* Main Content */}
               <Text className="text-gray-700 text-lg mb-6">
-                We're excited to have you join our community of smart shoppers! 
+                We&apos;re excited to have you join our community of smart shoppers! 
                 To get started with your shopping journey, please verify your email address.
               </Text>
 
@@ -62,7 +62,7 @@ export const EmailVerification: React.FC<VerificationEmailProps> = ({
               {/* Security Note */}
               <Text className="text-sm text-gray-600 mb-4">
                 For security reasons, this verification link will expire in 24 hours.
-                If you didn't create an account with ShopSmart, please ignore this email.
+                If you didn&apos;t create an account with ShopSmart, please ignore this email.
               </Text>
             </Section>
 

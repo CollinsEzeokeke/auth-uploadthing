@@ -15,10 +15,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { Loader2, X } from "lucide-react";
 import { signUp } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignUp() {
+	const { toast } = useToast()
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
@@ -165,8 +166,9 @@ export default function SignUp() {
 											setLoading(true);
 										},
 										onError: (ctx) => {
-											toast.error({
+											toast({
 												title: 'error',
+												description: ctx.error.message
 											});
 										},
 										onSuccess: async () => {

@@ -16,6 +16,7 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@react-email/components": "^0.0.28",
     "@react-email/tailwind": "^1.0.2",
+    "@uploadthing/react": "^7.1.1",
     "better-auth": "0.8.9-beta.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -27,7 +28,8 @@
     "resend": "^4.0.1",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^7.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -6,6 +6,7 @@ import {
   Heading,
   Html,
   Link,
+  Img,
   Preview,
   Section,
   Tailwind,
@@ -35,7 +36,7 @@ export const EmailVerification: React.FC<VerificationEmailProps> = ({
               
               {/* Logo Placeholder */}
               <div className="text-center mb-8">
-                <img
+                <Img
                   src="https://your-logo-url.com/logo.png"
                   alt="ShopSmart Logo"
                   className="mx-auto w-24 h-24"

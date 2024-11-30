@@ -82,6 +82,7 @@ export default function SignIn() {
               onClick={async () => {
                 setLoading(true)
                 await signIn.email({ email, password });
+                setLoading(false)
               }}
             >
               {loading ? (

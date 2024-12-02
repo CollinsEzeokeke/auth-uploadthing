@@ -13,7 +13,7 @@ const auth = (req: Request) => {
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   imageUploader: f({
-    image: {maxFileCount: 1, maxFileSize: '4MB'},
+    image: { maxFileCount: 1, maxFileSize: '4MB' },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {

@@ -3,7 +3,11 @@ import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+const auth = (req: Request) => {
+  // Actually use the req parameter
+  console.log("Authenticating request:", req.url);
+  return { id: "fakeId" };
+}; // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {

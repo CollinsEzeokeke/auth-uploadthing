@@ -115,19 +115,19 @@ export const EmailVerification: React.FC<VerificationEmailProps> = ({
 
 // email sender function 
 interface sendEmailProps {
-    to: string,
+    to: string, 
     subject: string,
     text: string
 }
 import resend from './resendClient';
 
-export const sendEmail = async ({ to, subject, text }: sendEmailProps) => {
+export const SendEmail = async ({ to, subject, text }: sendEmailProps) => {
     try {
         const { data, error } = await resend.emails.send({
-            from: "Chiflex <onboarding@resend.dev>",
+            from: "AuthUpload <onboarding@resend.dev>",
             to: to,
             subject: subject,
-            react: EmailVerification({ text }),
+            react: EmailVerification({text}),
         })
         if(data){
             console.log(data)
@@ -142,3 +142,5 @@ export const sendEmail = async ({ to, subject, text }: sendEmailProps) => {
         throw error
     }
 }
+
+export default SendEmail

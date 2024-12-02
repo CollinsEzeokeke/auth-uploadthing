@@ -1,7 +1,7 @@
 import { betterAuth, User } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@prisma/client";
-import { sendEmail } from '@/lib/emailVerification'
+import SendEmail from '@/lib/emailVerification'
 import { passkey } from "better-auth/plugins";
 
 const prisma = new PrismaClient();
@@ -12,19 +12,20 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
-        emailVerification: {
-            sendVerificationEmail: async (user: User, url: string) => {
-                await sendEmail({
-                    to: user.email,
-                    subject: "Verify your email address",
-                    text: `Click the link to verify your email: ${url}`,
-                });
-            },
-
-            verificationMaxAge: 24 * 60 * 60,
-        },
         autoSignIn: false,
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        sendOnsignIn: true,
+        sendVerificationEmail: async (data: {user:User, url:string}) => {
+            await SendEmail({
+                to: data.user.email,
+                subject: "Verify your email address",
+                text: data.url,
+            });
+        },
 
+        verificationMaxAge: 24 * 60 * 60,
     },
     socialProviders: {
         google: {

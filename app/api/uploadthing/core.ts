@@ -1,10 +1,9 @@
-import { NextRequest } from "next/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
-const auth = () => ({ id: "fakeId" }); // Fake auth function
+const auth = (_req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -13,9 +12,9 @@ export const ourFileRouter = {
     image: {maxFileCount: 1, maxFileSize: '4MB'},
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req: _req }) => {
+    .middleware(async ({ req }) => {
       // This code runs on your server before upload
-      const user = await auth();
+      const user = await auth(req);
 
       // If you throw, the user will not be able to upload
       if (!user) throw new UploadThingError("Unauthorized");

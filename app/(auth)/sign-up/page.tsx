@@ -72,14 +72,14 @@ const {startUpload} = useUploadThing("imageUploader", {
 					callbackURL: '/sign-in',
 					fetchOptions: {
 						credentials: 'include',
-						onResponse: (ctx) => {
+						onResponse: () => {
 							setLoading(false);
 							toast({
 								title: "User is being created...",
 								description: "Verify your email address to continue"
 							})
 						},
-						onRequest: (ctx) => {
+						onRequest: () => {
 							setLoading(true);
 							toast({
 								title: 'almost done....',

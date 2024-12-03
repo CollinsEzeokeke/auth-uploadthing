@@ -69,14 +69,22 @@ const {startUpload} = useUploadThing("imageUploader", {
 					password,
 					name: `${firstName} ${lastName}`,
 					image: image? imageUrl : "",
-					callbackURL: "/dashboard",
+					callbackURL: '/sign-in',
 					fetchOptions: {
 						credentials: 'include',
-						onResponse: () => {
+						onResponse: (ctx) => {
 							setLoading(false);
+							toast({
+								title: "User is being created...",
+								description: "Verify your email address to continue"
+							})
 						},
-						onRequest: () => {
+						onRequest: (ctx) => {
 							setLoading(true);
+							toast({
+								title: 'almost done....',
+								description: "verify your email to continue"
+							})
 						},
 						onError: (ctx) => {
 							toast({
@@ -85,7 +93,7 @@ const {startUpload} = useUploadThing("imageUploader", {
 							});
 						},
 						onSuccess: async () => {
-							router.push("/dashboard");
+							router.push("/verify");
 						},
 					},
 				});

@@ -7,15 +7,51 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { Loader2, Key } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
+import { authClient, signIn } from "@/lib/auth-client";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const { toast } = useToast()
+  const router = useRouter()
+
+  const SignInHandler = async () => {
+    setLoading(true)
+    try {
+        await authClient.signIn.email({
+            email: email,
+            password: password,
+            callbackURL: '/dashboard'
+        }, {
+            onRequest: () => {
+                setLoading(true)
+            },
+            onSuccess: async () => {
+                const session = await authClient.getSession()
+                if (session) {
+                    router.push('/dashboard')
+                }
+            },
+            onError: (ctx) => {
+                if (ctx.error.status === 403) {
+                    router.push('/verify')
+                }
+                toast({
+                    title: 'Error',
+                    description: ctx.error.message
+                })
+            }
+        })
+    } finally {
+        setLoading(false)
+    }
+}
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
@@ -79,11 +115,7 @@ export default function SignIn() {
               type="submit"
               className="w-full"
               disabled={loading}
-              onClick={async () => {
-                setLoading(true)
-                await signIn.email({ email, password });
-                setLoading(false)
-              }}
+              onClick={SignInHandler}
             >
               {loading ? (
                 <Loader2 size={16} className="animate-spin" />

@@ -14,27 +14,28 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import Image from "next/image";
 import { Loader2, X } from "lucide-react";
-import { signUp } from "@/lib/auth-client";
+import { authClient, signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { generateReactHelpers } from "@uploadthing/react"
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 export default function SignUp() {
-const { useUploadThing } = generateReactHelpers<OurFileRouter>();
-const {startUpload} = useUploadThing("imageUploader", {
-    onClientUploadComplete: (res) => {
-      console.log('Upload completed', res);
-    },
-    onUploadError: (error) => {
-      console.error('Upload error', error);
-    }
-  })
+	const { useUploadThing } = generateReactHelpers<OurFileRouter>();
+	const { startUpload } = useUploadThing("imageUploader", {
+		onClientUploadComplete: (res) => {
+			console.log('Upload completed', res);
+		},
+		onUploadError: (error) => {
+			console.error('Upload error', error);
+		}
+	})
 	const { toast } = useToast()
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [username, setUsername] = useState("")
 	const [passwordConfirmation, setPasswordConfirmation] = useState("");
 	const [image, setImage] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -55,49 +56,50 @@ const {startUpload} = useUploadThing("imageUploader", {
 
 	const handleSubmitForm = async () => {
 		setLoading(true)
-		try{
+		try {
 			let imageUrl = "";
 			if (image) {
-			  const profileUpload = await startUpload([image]);
-			  if (!profileUpload?.[0]?.url) {
-				throw new Error('Image upload failed');
-			  }
-			  imageUrl = profileUpload[0].url;
+				const profileUpload = await startUpload([image]);
+				if (!profileUpload?.[0]?.url) {
+					throw new Error('Image upload failed');
+				}
+				imageUrl = profileUpload[0].url;
 			}
-				await signUp.email({
-					email,
-					password,
-					name: `${firstName} ${lastName}`,
-					image: image? imageUrl : "",
-					callbackURL: '/sign-in',
-					fetchOptions: {
-						credentials: 'include',
-						onResponse: () => {
-							setLoading(false);
-							toast({
-								title: "User is being created...",
-								description: "Verify your email address to continue"
-							})
-						},
-						onRequest: () => {
-							setLoading(true);
-							toast({
-								title: 'almost done....',
-								description: "verify your email to continue"
-							})
-						},
-						onError: (ctx) => {
-							toast({
-								title: 'error',
-								description: ctx.error.message
-							});
-						},
-						onSuccess: async () => {
-							router.push("/verify");
-						},
+			await authClient.signUp.email({
+				email,
+				password,
+				username: username,
+				name: `${firstName} ${lastName}`,
+				image: image ? imageUrl : "",
+				callbackURL: '/sign-in',
+				fetchOptions: {
+					credentials: 'include',
+					onResponse: () => {
+						setLoading(false);
+						toast({
+							title: "User is being created...",
+							description: "Verify your email address to continue"
+						})
 					},
-				});
-		}catch(error){
+					onRequest: () => {
+						setLoading(true);
+						toast({
+							title: 'almost done....',
+							description: "verify your email to continue"
+						})
+					},
+					onError: (ctx) => {
+						toast({
+							title: 'error',
+							description: ctx.error.message
+						});
+					},
+					onSuccess: async () => {
+						router.push("/verify");
+					},
+				},
+			});
+		} catch (error) {
 			console.log(error)
 		}
 	}
@@ -120,9 +122,7 @@ const {startUpload} = useUploadThing("imageUploader", {
 									id="first-name"
 									placeholder="Max"
 									required
-									onChange={(e) => {
-										setFirstName(e.target.value);
-									}}
+									onChange={(e) => setFirstName(e.target.value)}
 									value={firstName}
 								/>
 							</div>
@@ -132,12 +132,20 @@ const {startUpload} = useUploadThing("imageUploader", {
 									id="last-name"
 									placeholder="Robinson"
 									required
-									onChange={(e) => {
-										setLastName(e.target.value);
-									}}
+									onChange={(e) => setLastName(e.target.value)}
 									value={lastName}
 								/>
 							</div>
+						</div>
+						<div className="grid gap-2">
+							<Label htmlFor="username">Username</Label>
+							<Input
+								id="username"
+								placeholder="maxrobinson"
+								required
+								onChange={(e) => setUsername(e.target.value)}
+								value={username}
+							/>
 						</div>
 						<div className="grid gap-2">
 							<Label htmlFor="email">Email</Label>
@@ -146,9 +154,7 @@ const {startUpload} = useUploadThing("imageUploader", {
 								type="email"
 								placeholder="m@example.com"
 								required
-								onChange={(e) => {
-									setEmail(e.target.value);
-								}}
+								onChange={(e) => setEmail(e.target.value)}
 								value={email}
 							/>
 						</div>
@@ -164,7 +170,7 @@ const {startUpload} = useUploadThing("imageUploader", {
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="password">Confirm Password</Label>
+							<Label htmlFor="password_confirmation">Confirm Password</Label>
 							<Input
 								id="password_confirmation"
 								type="password"

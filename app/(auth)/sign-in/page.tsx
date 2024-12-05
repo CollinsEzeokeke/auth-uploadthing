@@ -46,7 +46,7 @@ export default function SignIn() {
                 })
               }
                 if (ctx.error.status === 403) {
-                    router.push('/verify')
+                    router.push('/verify-email')
                 }
                 toast({
                     title: 'Error',
@@ -88,7 +88,7 @@ export default function SignIn() {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
-                  href="#"
+                  href="/forgot-password"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?

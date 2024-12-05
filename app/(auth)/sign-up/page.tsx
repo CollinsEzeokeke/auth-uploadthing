@@ -95,7 +95,7 @@ export default function SignUp() {
 						});
 					},
 					onSuccess: async () => {
-						router.push("/verify");
+						router.push("/verify-email");
 					},
 				},
 			});

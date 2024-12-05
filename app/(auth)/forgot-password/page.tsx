@@ -26,13 +26,13 @@ export default function ResetPassword() {
                 email: email,
                 redirectTo: "/reset-password",
                 fetchOptions: {
-                    onRequest: (ctx) => {
+                    onRequest: () => {
                         toast({
                             title: 'Sending reset instructions',
                             description: 'Please check your email inbox shortly'
                         });
                     },
-                    onResponse: (ctx) => {
+                    onResponse: () => {
                         setLoading(false);
                         toast({
                             title: 'Reset email sent',

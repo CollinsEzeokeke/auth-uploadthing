@@ -28,6 +28,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  console.log(user)
 
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault()

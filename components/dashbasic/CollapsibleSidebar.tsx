@@ -11,7 +11,7 @@ interface CollapsibleSidebarProps {
 }
 
 export const CollapsibleSidebar = forwardRef<HTMLDivElement, CollapsibleSidebarProps>(
-  function CollapsibleSidebar({ isOpen, setActiveSection, closeMenu }, ref) {
+  function CollapsibleSidebar({  setActiveSection }, ref) {
     const menuItems = [
       { icon: User, label: 'Profile', value: 'profile' },
       { icon: Settings, label: 'Account', value: 'account' },

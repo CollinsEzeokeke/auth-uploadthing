@@ -39,6 +39,12 @@ export default function SignIn() {
                 }
             },
             onError: (ctx) => {
+              if(ctx.error.status === 500) {
+                toast({
+                  title: "Trouble Sigining in?",
+                  description: "Check your Internet and try again"
+                })
+              }
                 if (ctx.error.status === 403) {
                     router.push('/verify')
                 }

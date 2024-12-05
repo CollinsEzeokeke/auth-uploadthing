@@ -8,8 +8,12 @@ import { CollapsibleSidebar } from '@/components/dashbasic/CollapsibleSidebar'
 import { AccountSettings } from '@/components/dashbasic/AccountSettings'
 import { InventoryManagement } from '@/components/dashbasic/InventoryManagement'
 import { SalesOverview } from '@/components/dashbasic/SalesOverview'
+// import { redirect } from 'next/navigation'
+import { useSession } from '@/lib/auth-client'
+
 
 export default function Dashboard() {
+  const { data } = useSession()
   const [user, setUser] = useState({
     name: 'John Doe',
     email: 'john@example.com',
@@ -18,7 +22,7 @@ export default function Dashboard() {
     username: 'johndoe123',
     bio: 'Passionate about creating and selling unique products.',
   })
-
+console.log(data?.user)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('profile')
   const sidebarRef = useRef<HTMLDivElement>(null)
@@ -71,7 +75,7 @@ export default function Dashboard() {
       <Button
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50"
+        className="fixed top-4 right-4 z-50"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         ref={toggleButtonRef}
       >
@@ -88,16 +92,18 @@ export default function Dashboard() {
           />
         )}
       </AnimatePresence>
+      <div className='w-screen flex justify-end'>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8 pl-16 pt-16 h-screen w-[80%]"
+        >
+          <h1 className="text-3xl font-bold">Welcome back, {user.name}</h1>
+          <div className='w-[50%]'>{renderActiveSection()}</div>
+        </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="space-y-8 pl-16 pt-16"
-      >
-        <h1 className="text-3xl font-bold">Welcome back, {user.name}</h1>
-        {renderActiveSection()}
-      </motion.div>
     </div>
   )
 }

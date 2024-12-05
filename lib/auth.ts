@@ -16,7 +16,7 @@ export const auth = betterAuth({
             await SendEmail({
                 to: user.email,
                 subject: 'Reset your password',
-                text: `Click the link to reset your password: ${url}`
+                text: url
             })
         },
     },

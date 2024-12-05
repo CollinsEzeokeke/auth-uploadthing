@@ -10,21 +10,22 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import UserTypeDialog from './UserTypeDialog'
 
-interface ProfileSectionProps {
-  user: {
+interface User {
     name: string
     email: string
     avatar: string
     userType: string
     username: string
     bio: string
-  }
-  setUser: React.Dispatch<React.SetStateAction<any>>
+}
+interface ProfileSectionProps{
+  user: User
+  setUser: React.Dispatch<React.SetStateAction<User>>
 }
 
 export function ProfileSection({ user, setUser }: ProfileSectionProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [editedUser, setEditedUser] = useState(user)
+  const [editedUser, setEditedUser] = useState<User>(user)
 
   const handleSave = () => {
     setUser(editedUser)

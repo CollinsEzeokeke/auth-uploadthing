@@ -21,7 +21,7 @@ export default function VerifyEmail() {
                     transition={{ delay: 0.2, duration: 0.5 }}
                 >
                     <p className="text-muted-foreground mb-6">
-                        We've sent a verification link to your email address. Please check your inbox and click the link to verify your account.
+                        We&apos;ve sent a verification link to your email address. Please check your inbox and click the link to verify your account.
                     </p>
                 </motion.div>
 
@@ -33,7 +33,7 @@ export default function VerifyEmail() {
                     transition={{ delay: 0.4, duration: 0.5 }}
                 >
                     <p className="text-sm text-muted-foreground mt-6">
-                        Don't see the email? Check your spam folder, just in case it ended up there.
+                        Don&apos;t see the email? Check your spam folder, just in case it ended up there.
                     </p>
                 </motion.div>
             </div>

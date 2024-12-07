@@ -55,7 +55,7 @@ export default function ResetPassword() {
             setLoading(false);
             toast({
                 title: 'Error',
-                description: 'Failed to initiate password reset',
+                description: `Failed to initiate password reset because ${error}`,
                 variant: 'destructive'
             });
         }

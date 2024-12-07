@@ -8,21 +8,31 @@ import { CollapsibleSidebar } from '@/components/dashbasic/CollapsibleSidebar'
 import { AccountSettings } from '@/components/dashbasic/AccountSettings'
 import { InventoryManagement } from '@/components/dashbasic/InventoryManagement'
 import { SalesOverview } from '@/components/dashbasic/SalesOverview'
-// import { redirect } from 'next/navigation'
-import { useSession } from '@/lib/auth-client'
-
+import getUser from '@/lib/getSessions'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Dashboard() {
-  const { data } = useSession()
-  const [user, setUser] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatar: '/placeholder.svg?height=200&width=200',
-    userType: 'Seller',
-    username: 'johndoe123',
-    bio: 'Passionate about creating and selling unique products.',
+  const { data: userData, isLoading, error } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const result = await getUser();
+      return JSON.parse(JSON.stringify(result));
+    }
   })
-console.log(data?.user)
+
+  // console.log(userData)
+  const data = userData?.user
+  console.log('this is ....')
+  console.log(data)
+  const [user, setUser] = useState({
+    name: data?.name,
+    email: data?.email,
+    image: data?.image,
+    userType: data?.UserType,
+    username: data?.username,
+    bio: data?.Bio
+  })
+  console.log(user.email)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('profile')
   const sidebarRef = useRef<HTMLDivElement>(null)
@@ -60,7 +70,7 @@ console.log(data?.user)
       case 'profile':
         return <ProfileSection user={user} setUser={setUser} />
       case 'account':
-        return <AccountSettings user={user} />
+        return <AccountSettings user={user.email} />
       case 'sales':
         return <SalesOverview />
       case 'inventory':
@@ -70,6 +80,8 @@ console.log(data?.user)
     }
   }
 
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading user data</div>
   return (
     <div className="relative">
       <Button

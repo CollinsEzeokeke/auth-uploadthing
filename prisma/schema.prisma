@@ -9,6 +9,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum UserRole {
+  BASIC_USER
+  COMPANY
+  ADMIN
+}
+
 model User {
   id            String    @id
   name          String
@@ -18,6 +24,8 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  Bio           String?
+  UserType      UserRole  @default(BASIC_USER)
   //Relations
   sessions Session[]
   accounts Account[]

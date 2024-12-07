@@ -9,14 +9,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import UserTypeDialog from './UserTypeDialog'
+import { UserRole } from '@prisma/client'
 
 interface User {
-    name: string
-    email: string
-    avatar: string
-    userType: string
-    username: string
-    bio: string
+  name: string | undefined
+  email: string | undefined
+  image: string | undefined  // Changed to include null
+  userType: UserRole | undefined     // Assuming UserRole is your enum type
+  username: string |  undefined // Changed to include null
+  bio: string | undefined     // Changed to include null
 }
 interface ProfileSectionProps{
   user: User
@@ -48,8 +49,8 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
       </div>
       <div className="flex items-center space-x-8">
         <Avatar className="h-24 w-24">
-          <AvatarImage src={user.avatar} alt={user.name} />
-          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+          <AvatarImage src={user.image ?? undefined} alt={user.name} />
+          <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
         </Avatar>
         <div>
           <h3 className="text-xl font-semibold">{user.name}</h3>
@@ -67,7 +68,7 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
-              value={editedUser.username}
+              value={editedUser.username ?? undefined}
               onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })}
             />
           </div>
@@ -75,7 +76,7 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
             <Label htmlFor="bio">Bio</Label>
             <Textarea
               id="bio"
-              value={editedUser.bio}
+              value={editedUser.bio ?? undefined}
               onChange={(e) => setEditedUser({ ...editedUser, bio: e.target.value })}
               rows={4}
             />

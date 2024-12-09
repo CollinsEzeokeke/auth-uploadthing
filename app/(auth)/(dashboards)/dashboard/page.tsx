@@ -8,29 +8,46 @@ import { CollapsibleSidebar } from '@/components/dashbasic/CollapsibleSidebar'
 import { AccountSettings } from '@/components/dashbasic/AccountSettings'
 import { InventoryManagement } from '@/components/dashbasic/InventoryManagement'
 import { SalesOverview } from '@/components/dashbasic/SalesOverview'
-import getUser from '@/lib/getSessions'
+import UserSessions from '@/lib/getSessions'
 import { useQuery } from '@tanstack/react-query'
+import getUser from '@/app/actions/user'
 
 export default function Dashboard() {
-  const { data: userData, isLoading, error } = useQuery({
-    queryKey: ['user'],
+  const { data: userData, isPending, error } = useQuery({
+    queryKey: ['Data'],
     queryFn: async () => {
-      const result = await getUser();
-      return JSON.parse(JSON.stringify(result));
+      const result = await UserSessions();
+
+      if (!result) {
+        return null; // Return null if no session exists
+      }
+
+      try {
+        const userInfo = await getUser(result?.user.email);
+        // First console.log to see the raw data
+        console.log('Raw userInfo:', userInfo);
+
+        // Safely stringify and parse to handle any non-serializable data
+        const serializedUser = JSON.parse(JSON.stringify(userInfo || {}));
+        // Console.log to verify serialization
+        console.log('Serialized userInfo:', serializedUser);
+
+        return serializedUser;
+      } catch (error) {
+        console.error('Error processing user data:', error);
+        throw error;
+      }
     }
   })
-
   // console.log(userData)
-  const data = userData?.user
-  console.log('this is ....')
-  console.log(data)
+  const data = userData.user
   const [user, setUser] = useState({
-    name: data?.name,
-    email: data?.email,
-    image: data?.image,
-    userType: data?.UserType,
-    username: data?.username,
-    bio: data?.Bio
+    name: data.name,
+    email: data.email,
+    image: data.image,
+    UserType: data.UserType,
+    username: data.username,
+    Bio: data.Bio
   })
   console.log(user.email)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -80,7 +97,7 @@ export default function Dashboard() {
     }
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isPending) return <div>Loading...</div>
   if (error) return <div>Error loading user data</div>
   return (
     <div className="relative">
@@ -111,7 +128,7 @@ export default function Dashboard() {
           transition={{ duration: 0.5 }}
           className="space-y-8 pl-16 pt-16 h-screen w-[80%]"
         >
-          <h1 className="text-3xl font-bold">Welcome back, {user.name}</h1>
+          <h1 className="text-3xl font-bold">Welcome back, {data.name}</h1>
           <div className='w-[50%]'>{renderActiveSection()}</div>
         </motion.div>
       </div>

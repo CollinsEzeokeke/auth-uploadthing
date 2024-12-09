@@ -15,9 +15,9 @@ interface User {
   name: string | undefined
   email: string | undefined
   image: string | undefined  // Changed to include null
-  userType: UserRole | undefined     // Assuming UserRole is your enum type
+  UserType: UserRole | undefined     // Assuming UserRole is your enum type
   username: string |  undefined // Changed to include null
-  bio: string | undefined     // Changed to include null
+  Bio: string | undefined     // Changed to include null
 }
 interface ProfileSectionProps{
   user: User
@@ -57,7 +57,7 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
           <p className="text-gray-500">{user.email}</p>
           <div className="flex items-center mt-2">
             <span className="text-sm font-medium text-gray-500 mr-2">User Type:</span>
-            <span className="text-sm font-semibold">{user.userType}</span>
+            <span className="text-sm font-semibold">{user.UserType}</span>
             <UserTypeDialog />
           </div>
         </div>
@@ -76,8 +76,8 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
             <Label htmlFor="bio">Bio</Label>
             <Textarea
               id="bio"
-              value={editedUser.bio ?? undefined}
-              onChange={(e) => setEditedUser({ ...editedUser, bio: e.target.value })}
+              value={editedUser.Bio ?? undefined}
+              onChange={(e) => setEditedUser({ ...editedUser, Bio: e.target.value })}
               rows={4}
             />
           </div>
@@ -91,7 +91,7 @@ export function ProfileSection({ user, setUser }: ProfileSectionProps) {
           </div>
           <div>
             <Label>Bio</Label>
-            <p>{user.bio}</p>
+            <p>{user.Bio}</p>
           </div>
         </div>
       )}

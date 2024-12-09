@@ -19,19 +19,12 @@ export default function Dashboard() {
       const result = await UserSessions();
 
       if (!result) {
-        return null; // Return null if no session exists
+        return null;
       }
 
       try {
         const userInfo = await getUser(result?.user.email);
-        // First console.log to see the raw data
-        console.log('Raw userInfo:', userInfo);
-
-        // Safely stringify and parse to handle any non-serializable data
         const serializedUser = JSON.parse(JSON.stringify(userInfo || {}));
-        // Console.log to verify serialization
-        console.log('Serialized userInfo:', serializedUser);
-
         return serializedUser;
       } catch (error) {
         console.error('Error processing user data:', error);
@@ -39,17 +32,6 @@ export default function Dashboard() {
       }
     }
   })
-  // console.log(userData)
-  const data = userData.user
-  const [user, setUser] = useState({
-    name: data.name,
-    email: data.email,
-    image: data.image,
-    UserType: data.UserType,
-    username: data.username,
-    Bio: data.Bio
-  })
-  console.log(user.email)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('profile')
   const sidebarRef = useRef<HTMLDivElement>(null)
@@ -85,15 +67,15 @@ export default function Dashboard() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'profile':
-        return <ProfileSection user={user} setUser={setUser} />
+        return <ProfileSection user={userData}/>
       case 'account':
-        return <AccountSettings user={user.email} />
+        return <AccountSettings user={userData.email} />
       case 'sales':
         return <SalesOverview />
       case 'inventory':
         return <InventoryManagement />
       default:
-        return <ProfileSection user={user} setUser={setUser} />
+        return <ProfileSection user={userData}/>
     }
   }
 
@@ -128,7 +110,7 @@ export default function Dashboard() {
           transition={{ duration: 0.5 }}
           className="space-y-8 pl-16 pt-16 h-screen w-[80%]"
         >
-          <h1 className="text-3xl font-bold">Welcome back, {data.name}</h1>
+          <h1 className="text-3xl font-bold">Welcome back, {userData?.username}</h1>
           <div className='w-[50%]'>{renderActiveSection()}</div>
         </motion.div>
       </div>

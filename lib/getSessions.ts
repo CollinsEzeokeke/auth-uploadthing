@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { authClient } from "./auth-client";
 
 export default async function UserSessions() {
@@ -10,6 +11,8 @@ export default async function UserSessions() {
         }
         if (!session) {
             console.log("UNAUTHORIZED");
+            const message = 'Access denied sign-in or create an account to continue'
+            redirect(`/unauthorized?message=${encodeURIComponent(message)}`)
             return null;
         }
         if(session){

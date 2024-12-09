@@ -21,15 +21,15 @@ interface User {
 }
 interface ProfileSectionProps{
   user: User
-  setUser: React.Dispatch<React.SetStateAction<User>>
+  // setUser: React.Dispatch<React.SetStateAction<User>>
 }
 
-export function ProfileSection({ user, setUser }: ProfileSectionProps) {
+export function ProfileSection({ user}: ProfileSectionProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedUser, setEditedUser] = useState<User>(user)
 
   const handleSave = () => {
-    setUser(editedUser)
+    // setUser(editedUser)
     setIsEditing(false)
   }
 

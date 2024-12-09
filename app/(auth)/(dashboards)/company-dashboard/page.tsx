@@ -1,6 +1,6 @@
 'use client'
 
-import { authClient } from '@/lib/auth-client'
+// import { authClient } from '@/lib/auth-client'
 import getUser from '@/app/actions/user'
 import { useQuery } from '@tanstack/react-query'
 import UserSessions from '@/lib/getSessions'
@@ -10,6 +10,9 @@ const ClientComponent = () => {
     queryKey: ['Data'],
     queryFn: async () => {
         const result = await UserSessions();
+        if(result){
+          await getUser(result?.user.email)
+        }
         return JSON.parse(JSON.stringify(result?.user))
     }
   })
@@ -19,12 +22,9 @@ if(isPending){
 if (error){
     console.log(error)
 }
-if(userData){
-    return;
-}
   return(
     <div>
-    <h1>THIS IS THE USER {userData}</h1>
+    <h1>THIS IS THE USER {userData.name}</h1>
     </div>
   )
 }

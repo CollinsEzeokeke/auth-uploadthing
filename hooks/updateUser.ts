@@ -1,6 +1,5 @@
 // hooks/useUpdateUser.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import { User } from '@prisma/client'
 
 interface UpdateUserData {
@@ -13,8 +12,19 @@ export function useUpdateUser() {
 
     return useMutation({
         mutationFn: async ({ userId, data }: UpdateUserData) => {
-            const response = await axios.patch(`/api/users/${userId}`, data)
-            return response.data
+            const response = await fetch(`/api/users/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            return response.json()
         },
         onSuccess: (data) => {
             // Invalidate and refetch

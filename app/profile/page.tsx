@@ -1,4 +1,6 @@
 // app/profile/page.tsx
+'use client'
+
 import { UpdateUserForm } from '@/components/updateUserComponent'
 import { UseGetUser } from '@/hooks/gettingUser'
 

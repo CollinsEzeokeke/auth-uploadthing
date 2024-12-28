@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+*_The Perfect Auth combo_* *2024*
 
-## Getting Started
 
-First, run the development server:
+I built a simple application which might serve as a reference to futher authentication more like a template to make authentication of users seemlessly eaiser..
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+By combing the power of Authentication provided by Better-Auth the seemless upload feature of uploadthing and using Prisma as an ORM for my Database (Supabase), the mailing power of resend using some shadcn components you can have your users authenticated and routed to the dashboard instantly
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+with protected routes and actions made to fetch users data and update them.......... I must say development just got easier, faster and way too good to be true..... our fore father ought to be Jealous
 
-## Learn More
+add your 
 
-To learn more about Next.js, take a look at the following resources:
+DATABASE_URL
+DIRECT_URL
+BETTER_AUTH_SECRET
+BETTER_AUTH_URL
+RESEND_API_KEY
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+UPLOADTHING_TOKEN
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+run 	
+	pnpm install 
+ 	pnpx prisma generate
+  	pnpx @better-auth/cli generate
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   to get started have fun!!!!!
+ 
